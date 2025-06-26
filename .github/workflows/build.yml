@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  # Prepare the environment and build the plugin
+  # Prepare the environment and build the project
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -40,9 +40,9 @@ jobs:
         run: chmod +x mvnw
 
       # Build the project
-      - name: Build plugin
+      - name: Build project
         id: build
-        run: ./mvnw clean verify -T 1.0C --batch-mode
+        run: ./mvnw clean verify -T 2.0C --batch-mode
 
       # Extract Maven artifactId and version
       - name: Project version

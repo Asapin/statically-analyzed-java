@@ -92,5 +92,3 @@ Contributions are welcome! Feel free to open issues or submit pull requests to i
 
 ---
 **Start building robust and maintainable Java applications today!**
-```
-

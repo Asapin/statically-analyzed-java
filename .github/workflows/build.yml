@@ -1,0 +1,56 @@
+name: Build
+on:
+  # Trigger the workflow on pushes to only the 'main' branch (this avoids duplicate checks being run e.g., for dependabot pull requests)
+  push:
+    branches: [ main ]
+  # Trigger the workflow on any pull request
+  pull_request:
+
+jobs:
+  # Prepare the environment and build the plugin
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.properties.outputs.version }}
+      changelog: ${{ steps.properties.outputs.changelog }}
+      pluginVerifierHomeDir: ${{ steps.properties.outputs.pluginVerifierHomeDir }}
+    steps:
+
+      # Free GitHub Actions Environment Disk Space
+      - name: Maximize Build Space
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
+        with:
+          tool-cache: false
+          large-packages: false
+
+      # Set up the Java environment for the next steps
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      # Check out the current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v4
+
+      # Grant permissions to Maven wrapper
+      - name: Permissions for Maven wrapper
+        run: chmod +x mvnw
+
+      # Build the project
+      - name: Build plugin
+        id: build
+        run: ./mvnw clean verify -T 1.0C --batch-mode
+
+      # Extract Maven artifactId and version
+      - name: Project version
+        run: echo "RELEASE_ARTIFACT=$(./mvnw -q -Dexec.executable=echo -Dexec.args='${project.artifactId}-${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
+
+      # Store the resulting jar file as an artifact for downloading
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.RELEASE_ARTIFACT }}
+          path: ./target/${{ env.RELEASE_ARTIFACT }}.jar

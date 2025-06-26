@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.company</groupId>
+    <artifactId>app</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spotless-maven-plugin.version>2.44.5</spotless-maven-plugin.version>
+        <palantir-formatter.version>2.69.0</palantir-formatter.version>
+        <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
+        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
+        <error-prone.version>2.39.0</error-prone.version>
+        <nullaway.version>0.12.7</nullaway.version>
+        <jspecify.version>1.0.0</jspecify.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jspecify</groupId>
+                <artifactId>jspecify</artifactId>
+                <version>${jspecify.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jspecify</groupId>
+            <artifactId>jspecify</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless-maven-plugin.version}</version>
+                <configuration>
+                    <java>
+                        <palantirJavaFormat>
+                            <version>${palantir-formatter.version}</version>
+                            <style>PALANTIR</style>
+                            <formatJavadoc>true</formatJavadoc>
+                        </palantirJavaFormat>
+                        <removeUnusedImports/>
+                        <formatAnnotations/>
+                        <trimTrailingWhitespace/>
+                        <endWithNewline/>
+                        <importOrder>
+                            <order>\#,java,org,com,</order>
+                        </importOrder>
+                        <indent>
+                            <spaces>true</spaces>
+                            <spacesPerTab>4</spacesPerTab>
+                        </indent>
+                        <lineEndings>UNIX</lineEndings>
+                    </java>
+                    <yaml>
+                        <includes>
+                            <include>.github/dependabot.yml</include>
+                            <include>.github/workflows/build.yml</include>
+                        </includes>
+                        <trimTrailingWhitespace/>
+                        <endWithNewline/>
+                        <indent>
+                            <spaces>true</spaces>
+                            <spacesPerTab>2</spacesPerTab>
+                        </indent>
+                        <lineEndings>UNIX</lineEndings>
+                    </yaml>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <banDuplicatePomDependencyVersions/>
+                                <banDynamicVersions/>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>org.apache.logging.log4j:log4j-core:[,2.17.0]</exclude>
+                                        <searchTransitive>true</searchTransitive>
+                                    </excludes>
+                                </bannedDependencies>
+                                <dependencyConvergence/>
+                                <requireJavaVersion>
+                                    <version>21</version>
+                                </requireJavaVersion>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>UTF-8</encoding>
+                    <compilerArgs>
+                        <arg>-XDcompilePolicy=simple</arg>
+                        <arg>--should-stop=ifError=FLOW</arg>
+                        <arg>-Xplugin:ErrorProne -XepOpt:NullAway:AnnotatedPackages=io.company</arg>
+                    </compilerArgs>
+                    <failOnWarning>true</failOnWarning>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>com.google.errorprone</groupId>
+                            <artifactId>error_prone_core</artifactId>
+                            <version>${error-prone.version}</version>
+                        </path>
+                        <path>
+                            <groupId>com.uber.nullaway</groupId>
+                            <artifactId>nullaway</artifactId>
+                            <version>${nullaway.version}</version>
+                        </path>
+                        <!-- Other annotation processors go here.
+
+                        If 'annotationProcessorPaths' is set, processors will no longer be
+                        discovered on the regular -classpath; see also 'Using Error Prone
+                        together with other annotation processors' below. -->
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

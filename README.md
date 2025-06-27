@@ -1,94 +1,168 @@
 # Java Project Template with Static Analysis and CI/CD
 
-This repository is a template designed for creating Java projects with built-in static analysis tools, code quality checks, dependency management, and a basic CI/CD setup. It is fully integrated with GitHub Actions and Dependabot to streamline your project's development and maintenance process.
+This repository provides a Java Maven project template for creating Java projects with built-in static analysis tools,
+code quality checks, dependency management, and CI/CD integration. It is designed to serve as a starting point for new
+Java projects, ensuring consistency and quality from the outset.
 
 ## Features
 
-This template provides the following features and pre-configurations:
-
-### Core Setup
-- **Java 21**: Utilizes the latest Long-Term Support (LTS) version of Java.
-- **Maven Integration**: Handles dependency management and build automation.
-
-### Tools for Code Quality and Static Analysis
-1. **Spotless**:
-   - Enforces consistent code formatting using `PALANTIR` style.
-   - Automatically removes unused imports, trims trailing whitespaces, ensures files end with a newline, and formats annotations.
-   - Supports configured import order and 4-space indentation.
-   - Includes formatting rules for both Java and YAML files.
-
-2. **Maven Enforcer Plugin**:
-   - Prevents issues like duplicate or dynamic dependency versions.
-   - Enforces dependency convergence to avoid version conflicts.
-   - Ensures the required Java version (`Java 21`) is used for compilation.
-   - Example of banned dependencies for improved security (e.g., bans older vulnerable Log4j versions).
-
-3. **Error Prone**:
-   - Detects common programming bugs during compilation.
-   - Configured to fail the build on warnings to ensure high-quality code.
-
-4. **NullAway**:
-   - Provides comprehensive nullness analysis during compilation.
-   - Prevents potential `NullPointerException`s by requiring proper null annotations.
-
-5. **Jspecify**:
-   - Leverages a standard set of nullability annotations for integration with tools like NullAway.
-
-### CI/CD Workflow
-- **GitHub Actions Workflow**:
-  - Configures a basic build workflow (`build.yml`) for continuous integration, ensuring that the codebase always meets quality standards.
-  
-- **Dependabot Integration**:
-  - Keeps your dependencies updated by providing automated pull requests for dependency upgrades.
-
-### Repository Usability
-- Designed to be used as a **GitHub Template Repository**, making it easy to initialize new projects with minimal setup effort.
+* **Maven Project Structure:** Configured for Java 21 with a standard project layout.
+* **Code Formatting:** Uses [Spotless](https://github.com/diffplug/spotless)
+  with [Palantir Java Format](https://github.com/palantir/palantir-java-format) for consistent code style.
+* **Static Analysis:** Integrates [Error Prone](https://errorprone.info/)
+  and [NullAway](https://github.com/uber/NullAway) for catching bugs and enforcing null safety.
+* **Dependency Management:** Employs
+  the [Maven Enforcer Plugin](https://maven.apache.org/enforcer/maven-enforcer-plugin/) to enforce rules like banning
+  duplicate dependencies and requiring Java 21.
+* **CI/CD:** Includes a GitHub Actions workflow for automated builds and Dependabot for dependency updates.
+* **IDE Settings:** Pre-configured code style settings for IntelliJ IDEA.
+* **Maven Wrapper:** Ensures consistent builds across different environments with Maven 3.9.9 (wrapper version 3.3.2).
+* **Consistent Line Endings:** Enforced via `.gitattributes` for cross-platform compatibility.
 
 ## How to Use
 
-Follow these steps to get started:
+To start a new project using this template, follow these steps:
 
-1. **Use the Template**:
-   - Click the `Use this template` button on GitHub and create a new repository.
+* **Clone the Repository:**
+  ```bash
+  git clone https://github.com/your-username/your-repo.git
+  cd your-repo
+  ```
+* **Update pom.xml:**
+  * Modify the `groupId`, `artifactId`, and `version` to match your project. 
+  * Example:
+    ```xml
+    <groupId>io.company</groupId>
+    <artifactId>app</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    ```
+* **Rename Package Structure** (if necessary):
+  * Update the package names in the source files (e.g., `src/main/java/io/company`) to align with your project's structure.
+* **Start Developing:**
+  * Use the included Maven wrapper to build and run your project:
+    ```bash
+    ./mvnw clean verify
+    ```
+  * The Maven wrapper ensures you don’t need to install Maven locally, using version 3.9.9 as specified.
 
-2. **Clone Your Repository**:
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-   cd YOUR_REPOSITORY
-   ```
+## Configuration Details
 
-3. **Configure Your Project**:
-    - Update `groupId`, `artifactId`, and `version` in the `pom.xml` with your project's details.
-    - Customize the `NullAway:AnnotatedPackages` configuration in `pom.xml` to match your project's base package.
+### Maven Plugins
 
-4. **Start Development**:
-    - Add your code, and benefit from the built-in quality checks and CI/CD integration.
+* **Spotless Maven Plugin:**
+  * Formats Java code using Palantir Java Format with the PALANTIR style. 
+  * Features:
+    * Removes unused imports. 
+    * Formats annotations and Javadoc. 
+    * Trims trailing whitespace and ensures files end with a newline. 
+    * Enforces a specific import order (`#, java, org, com, <others>`). 
+    * Uses 4-space indentation and UNIX line endings (`\n`). 
+  * Also formats YAML files in `.github/` (e.g., `dependabot.yml`, `build.yml`) with 2-space indentation.
+* **Maven Enforcer Plugin:**
+  * Enforces rules such as:
+    * Banning duplicate POM dependency versions and dynamic versions. 
+    * Excluding vulnerable dependencies (e.g., Log4j versions < 2.17.0). 
+    * Ensuring dependency convergence. 
+    * Requiring `Java 21`. 
+  * Fails the build if any rule is violated. 
+* **Maven Compiler Plugin:**
+  * Compiles with Java 21. 
+  * Integrates Error Prone and NullAway for static analysis.
+    * **Error Prone:**
+      * Detects common programming bugs during compilation. 
+      * Configured to fail the build on warnings to ensure high-quality code.
+    * **NullAway:**
+      * Provides comprehensive nullness analysis during compilation. 
+      * Prevents potential `NullPointerException`s by requiring proper null annotations.
+  * Configured to fail on warnings to maintain code quality. 
+  * Uses JSpecify annotations for null safety within the `io.company` package.
 
-## Prerequisites
+### Dependencies
 
-Make sure you have the following installed:
-- **Java Development Kit (JDK) 21**
-- Use the included Maven wrapper `mvnw`
+* **JSpecify:**
+  * Provides annotations for null safety, used in conjunction with NullAway.
 
-## Build and Verification
+### Code Style
 
-To build the project and execute all quality checks, run:
-```
-bash ./mvnw clean verify -T 1.0C
-``` 
+* **Import Order:** Groups imports as: `static imports`, `java`, `org`, `com`, and `others`, with blank lines between groups. 
+* Indentation: Uses 4 spaces for Java code, 2 spaces for YAML. 
+* Line Endings: Ensures UNIX-style line endings (`\n`) for all files.
 
-This command will:
-- Clean the project directory.
-- Run code formatting and static analysis checks via Spotless.
-- Enforce dependency and Java version rules using the Maven Enforcer Plugin.
-- Compile and analyze code using Error Prone and NullAway.
-- Generate and install project artifacts locally.
+### YAML Formatting
 
-If there are any issues with code quality or static analysis, the build will fail, providing actionable feedback for resolution.
+* Spotless formats YAML files in the `.github/` directory, ensuring consistent 2-space indentation and UNIX line endings.
+
+### CI/CD Setup
+
+#### GitHub Actions
+
+* **Workflow File:** `.github/workflows/build.yml`
+* **Triggers:**
+  * Pushes to the `main` branch. 
+  * Pull requests.
+* **Jobs:**
+  * Runs on `ubuntu-latest` with Java 21 (Temurin distribution). 
+  * Steps:
+    * Maximizes disk space for the build environment. 
+    * Sets up Java 21. 
+    * Checks out the code. 
+    * Grants execution permissions to the Maven wrapper. 
+    * Builds the project with `./mvnw clean verify -T 2.0C --batch-mode`. 
+    * Extracts the `artifactId` and `version` from the POM. 
+    * Uploads the resulting `.jar` file as an artifact (e.g., `app-0.0.1-SNAPSHOT.jar`).
+
+#### Dependabot
+
+* **Configuration File:** `.github/dependabot.yml`
+* **Updates:**
+  * Checks daily for updates to:
+    * Maven dependencies (in `/`). 
+    * GitHub Actions configurations (in `/`).
+
+### IDE Settings
+
+The template includes IntelliJ IDEA settings for consistent code style:
+
+* **External Dependencies:**
+  * Configured to use Palantir Java Format (see `.idea/externalDependencies.xml`). 
+* **Code Style:**
+  * Import layout matches the Spotless configuration (see `.idea/codeStyles/Project.xml`). 
+  * Applied automatically when opening the project in IntelliJ IDEA.
+
+These settings are stored in the `.idea/` directory.
+
+### Build Configurations
+
+The following build configurations are pre-set and can be used in your IDE:
+
+* **[Clean] With tests:**
+  ```bash
+  clean verify -T 1.0C
+  ```
+* **[Clean] Without tests:**
+  ```bash
+  clean verify -T 1.0C -Dmaven.test.skip=true
+  ```
+* **[Incremental] With tests:**
+  ```bash
+  verify -T 1.0C
+  ```
+* **[Incremental] Without tests:**
+  ```bash
+  verify -T 1.0C -Dmaven.test.skip=true
+  ```
+* **[Spotless] Fix code style:**
+  ```bash
+  spotless:apply
+  ```
+
+These commands use `-T 1.0C` for parallel builds with one thread per CPU core.
+
+### Additional Notes
+
+* **.gitattributes:**
+  * Ensures all text files use UNIX-style line endings (`\n`) with `* text eol=lf`, promoting cross-platform consistency.
 
 ## Contributing
 
 Contributions are welcome! Feel free to open issues or submit pull requests to improve this template or add more features.
-
----
-**Start building robust and maintainable Java applications today!**

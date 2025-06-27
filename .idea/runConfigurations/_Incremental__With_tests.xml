@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="[Build][Clean] Without tests" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="[Incremental] With tests" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -11,11 +11,9 @@
           </option>
           <option name="goals">
             <list>
-              <option value="clean" />
               <option value="verify" />
               <option value="-T" />
               <option value="1.0C" />
-              <option value="-Dmaven.test.skip=true" />
             </list>
           </option>
           <option name="multimoduleDir" />

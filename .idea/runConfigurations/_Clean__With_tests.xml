@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="[Build][Incremental] With tests" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="[Clean] With tests" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -11,6 +11,7 @@
           </option>
           <option name="goals">
             <list>
+              <option value="clean" />
               <option value="verify" />
               <option value="-T" />
               <option value="1.0C" />

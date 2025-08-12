@@ -33,7 +33,7 @@ jobs:
 
       # Check out the current repository
       - name: Fetch Sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # Grant permissions to Maven wrapper
       - name: Permissions for Maven wrapper

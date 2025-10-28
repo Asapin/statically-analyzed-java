@@ -25,7 +25,7 @@ To start a new project using this template, follow these steps:
 
 * **Clone the Repository:**
   ```bash
-  git clone https://github.com/your-username/your-repo.git
+  git clone https://github.com/Asapin/statically-analyzed-java.git
   cd your-repo
   ```
 * **Update pom.xml:**
@@ -85,7 +85,7 @@ To start a new project using this template, follow these steps:
 
 ### Code Style
 
-* **Import Order:** Groups imports as: `static imports`, `java`, `org`, `com`, and `others`, with blank lines between
+* **Import Order:** Groups imports as: `java`, `javax`, `org`, `com`, `others` and `static imports`, with blank lines between
   groups.
 * Indentation: Uses 4 spaces for Java code, 2 spaces for YAML.
 * Line Endings: Ensures UNIX-style line endings (`\n`) for all files.

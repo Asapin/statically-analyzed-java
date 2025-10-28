@@ -127,7 +127,7 @@
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
-                        <encoding>UTF-8</encoding>
+                        <encoding>${project.build.sourceEncoding}</encoding>
                         <showWarnings>true</showWarnings>
                         <failOnWarning>true</failOnWarning>
                         <compilerArgs>

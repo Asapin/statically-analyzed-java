@@ -18,7 +18,7 @@
         <error-prone.version>2.44.0</error-prone.version>
         <nullaway.version>0.13.1</nullaway.version>
         <jspecify.version>1.0.0</jspecify.version>
-        <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
